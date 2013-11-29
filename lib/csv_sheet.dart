@@ -81,7 +81,7 @@ class CsvSheet {
    * Throws a [RangeError] if invalid index or if a String index is used but
    * [hasHeaderRow] is false.
    */
-  _CsvColumn operator [](index) {
+  operator [](index) {
     if(index is String) {
       var tmp = index;
       if(!hasHeaderRow) {
@@ -98,5 +98,9 @@ class CsvSheet {
     return _fakeColumn;
   }
   
+  // TODO: Add a forEachRow method.
+  
+  // Used by _CsvColumn to access rows spreadsheet style instead of list style.
   _getValue(row, index) => _contents[index][row];
+  
 }

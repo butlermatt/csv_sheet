@@ -64,5 +64,10 @@ main() {
       doesntWork() => sheet['col5'][2];
       expect(doesntWork, throwsRangeError);
     });
+    test('Throws range error if String index passed but no headers set', () {
+      var sheet = new CsvSheet(SHEET);
+      doesntWork() => sheet['col1'][2];
+      expect(doesntWork, throwsRangeError);
+    });
   });
 }
