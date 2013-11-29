@@ -1,6 +1,6 @@
 library csv_sheet;
 
-part 'src/csv_row.dart';
+part 'src/csv_column.dart';
 
 /**
  * An indexable collection of CSV Values as a spreadsheet.
@@ -11,16 +11,29 @@ part 'src/csv_row.dart';
  * Columns can be referenced via their index number (1-based) or
  * via their column header [String].
  * 
- *     // access the value of cell 3,4 (in a spreadsheet as C4)
- *     var value = csvSheet[3][4];
+ * CsvSheets can be visualized as such:
+ * 
+ *          1    2    3
+ *       .----+----+----.
+ *       |col1|col2|col3|
+ *       +----+----+----+
+ *     1 |  1 |  2 |  3 |
+ *       +----+----+----+
+ *     2 |  4 |  5 |  6 |
+ *       +----+----+----+
+ *     3 |  7 |  8 |  9 |
+ *       '----+----+----'
+ * 
+ *     // access the value of cell 2,3 (in a spreadsheet as B3)
+ *     var value = csvSheet[2][3]; // 8
  *     
  *     // If the cell has the header value of 'first name'
- *     var value = csvSheet['first name'][4];
+ *     var value = csvSheet['col1'][2]; // 4
  */
 class CsvSheet {
   List _contents;
   List _rows;
-  _CsvRow _fakeRow;
+  _CsvColumn _fakeColumn;
   
   /// Return true if this sheet was created with a header row.
   bool hasHeaderRow;
@@ -46,7 +59,7 @@ class CsvSheet {
       { bool headerRow: false,
       String fieldSep: ',',
       String lineSep: '\n' }) {
-    _fakeRow = new _CsvRow(this);
+    _fakeColumn = new _CsvColumn(this);
     
     var rows = contents.split(lineSep);
     hasHeaderRow = headerRow;
@@ -61,17 +74,28 @@ class CsvSheet {
     }
   }
   
-  _CsvRow operator [](index) {
+  /**
+   * Access the column specified by [index]. Index may be a 1-based integer
+   * value or a string matching one of the header rows.
+   * 
+   * Throws a [RangeError] if invalid index or if a String index is used but
+   * [hasHeaderRow] is false.
+   */
+  _CsvColumn operator [](index) {
     if(index is String) {
       var tmp = index;
+      if(!hasHeaderRow) {
+        throw new RangeError('$tmp is not a valid column header');
+      }
+      
       index = _rows.indexOf(index);
       if(index == -1) throw new RangeError('$tmp is not a valid column header');
-      _fakeRow.row = index;
+      _fakeColumn.row = index;
     } else {
-      _fakeRow.row = index-1;
+      _fakeColumn.row = index-1;
     }
     
-    return _fakeRow;
+    return _fakeColumn;
   }
   
   _getValue(row, index) => _contents[index][row];

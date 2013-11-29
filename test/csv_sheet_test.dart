@@ -8,7 +8,7 @@ import 'package:csv_sheet/csv_sheet.dart';
 const SHEET = 'col1,col2,col3\n1,2,3\n4,5,6\n7,8,9';
 /*      1    2    3
  *   .----+----+----.
- *   |col1|col2|col3| <-- Header
+ *   |col1|col2|col3|
  *   +----+----+----+
  * 1 |  1 |  2 |  3 |
  *   +----+----+----+
