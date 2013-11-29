@@ -1,0 +1,11 @@
+part of csv_sheet;
+
+class _CsvRow {
+  final CsvSheet sheet;
+  int row = 0;
+  
+  _CsvRow(this.sheet);
+  
+  // TODO: Should we have a CsvCell type? For now it's just strings.
+  String operator [](index) => sheet._getValue(row, index-1);
+}
