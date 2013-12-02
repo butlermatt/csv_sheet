@@ -1,5 +1,7 @@
 library csv_sheet;
 
+import 'dart:collection' show HashMap;
+
 part 'src/csv_column.dart';
 
 /**
@@ -32,7 +34,7 @@ part 'src/csv_column.dart';
  */
 class CsvSheet {
   List _contents;
-  List _rows;
+  HashMap _headers;
   _CsvColumn _fakeColumn;
   
   /// Return true if this sheet was created with a header row.
@@ -61,25 +63,26 @@ class CsvSheet {
       String lineSep: '\n' }) {
     _fakeColumn = new _CsvColumn(this);
     
-    var rows = contents.split(lineSep);
+    var allRows = contents.split(lineSep);
     hasHeaderRow = headerRow;
     
     if(hasHeaderRow) {
       // TODO: Should throw if a header name is repeated.
-      _rows = rows[0].split(fieldSep);
-      for(var i = 0; i < _rows.length; i++) {
+      var _rows = allRows[0].split(fieldSep);
+      _headers = new HashMap();
+      for(var i = 0; i < _rows.length; i ++) {
         var val = _rows[i];
         if(_rows.indexOf(val, i+1) != -1) {
           throw 
             new FormatException('The header column $val appears more than once');
         }
+        _headers[_rows[i]] = i;
       }
-      
-      _contents = new List.generate(rows.length - 1, (index) =>
-          rows[index+1].split(fieldSep).map((cell) => cell.trim()).toList());
+      _contents = new List.generate(allRows.length - 1, (index) =>
+          allRows[index+1].split(fieldSep).map((cell) => cell.trim()).toList());
     } else {
-      _contents = new List.generate(rows.length, (index) => 
-        rows[index].split(fieldSep).map((cell) => cell.trim()).toList());
+      _contents = new List.generate(allRows.length, (index) => 
+        allRows[index].split(fieldSep).map((cell) => cell.trim()).toList());
     }
   }
   
@@ -97,8 +100,8 @@ class CsvSheet {
         throw new RangeError('$tmp is not a valid column header');
       }
       
-      index = _rows.indexOf(index);
-      if(index == -1) throw new RangeError('$tmp is not a valid column header');
+      if(!_headers.containsKey(index)) throw new RangeError('$tmp is not a valid column header');
+      index = _headers[index];
       _fakeColumn.row = index;
     } else {
       _fakeColumn.row = index-1;
