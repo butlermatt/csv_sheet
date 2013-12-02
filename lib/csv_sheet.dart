@@ -98,7 +98,17 @@ class CsvSheet {
     return _fakeColumn;
   }
   
-  // TODO: Add a forEachRow method.
+  /**
+   * Iterate through each row in the spreadsheet, calling 'action' for each
+   * row. It is an error if action tries to modify the list. The header row
+   * is not passed as the first row.
+   * 
+   * Note: The list of cells passed to 'action' will be zero-indexed and not
+   * 1-based index as the CsvSheet is.
+   */
+  void forEachRow(void action(List cells)) {
+    _contents.forEach(action);
+  }
   
   // Used by _CsvColumn to access rows spreadsheet style instead of list style.
   _getValue(row, index) => _contents[index][row];

@@ -36,11 +36,16 @@ main() {
       expect(works, returnsNormally);
     });
     test('Should accept lineSeperator argument', () {
-      var testSheet = '1,2,3\r\n,3,2,1';
+      var testSheet = '1,2,3\r\n3,2,1';
       works() { new CsvSheet(testSheet, lineSep: '\r\n'); };
       expect(works, returnsNormally);
     });
-    // TODO: Add a test for trims whitespace.
+    test('Should automatically remove extra whitespace.', () {
+      var testSheet = '1, 2  ,3\t4\n5   ,     6,\t\t7\t,8';
+      var sheet = new CsvSheet(testSheet);
+      expect(sheet[2][2], equals('6'));
+      expect(sheet[3][2], equals('7'));
+    });
   });
   
   group('CsvSheet hasHeaderRow', () {
@@ -68,6 +73,26 @@ main() {
       var sheet = new CsvSheet(SHEET);
       doesntWork() => sheet['col1'][2];
       expect(doesntWork, throwsRangeError);
+    });
+  });
+  
+  group('CsvSheet forEachRow', () {
+    test('Should call the callback for each row passed', () {
+      var testSheet = '1,2,3\n1,2,3';
+      var sheet = new CsvSheet(testSheet);
+      var callback = expectAsync1((List row) {
+        expect(row[0], equals('1'));
+      }, count: 2);
+      
+      sheet.forEachRow(callback);
+    });
+    test('Should not pass the header row to the callback', () {
+      var sheet = new CsvSheet(SHEET, headerRow: true);
+      var callback = expectAsync1((List row) {
+        expect(row, isList);
+      }, count: 3);
+      
+      sheet.forEachRow(callback);
     });
   });
 }
