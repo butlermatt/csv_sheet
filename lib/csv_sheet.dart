@@ -65,6 +65,7 @@ class CsvSheet {
     hasHeaderRow = headerRow;
     
     if(hasHeaderRow) {
+      // TODO: Should throw if a header name is repeated.
       _rows = rows[0].split(fieldSep);
       _contents = new List.generate(rows.length - 1, (index) =>
           rows[index+1].split(fieldSep).map((cell) => cell.trim()).toList());
@@ -110,7 +111,13 @@ class CsvSheet {
     _contents.forEach(action);
   }
   
+  /**
+   * Return the number of rows contained in this sheet. Does not included
+   * the header row, if provided.
+   */
+  int get numRows => _contents.length;
+  
   // Used by _CsvColumn to access rows spreadsheet style instead of list style.
-  _getValue(row, index) => _contents[index][row];
+  _getValue(column, row) => _contents[row][column];
   
 }

@@ -48,10 +48,15 @@ main() {
     });
   });
   
-  group('CsvSheet hasHeaderRow', () {
-    test('Is true when headerRow is passed to constructor', () {
+  group('CsvSheet attributes', () {
+    test('hasHeaderRow Is true when headerRow is passed to constructor', () {
       var sheet = new CsvSheet(SHEET, headerRow: true);
       expect(sheet.hasHeaderRow, isTrue);
+    });
+    
+    test('numRows returns number of rows, excluding header row.', () {
+      var sheet = new CsvSheet(SHEET, headerRow: true);
+      expect(sheet.numRows, equals(3));
     });
   });
   
