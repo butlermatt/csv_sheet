@@ -3,6 +3,7 @@ library csv_sheet;
 import 'dart:collection' show HashMap;
 
 part 'src/csv_column.dart';
+part 'src/csv_row.dart';
 
 /**
  * An indexable collection of CSV Values as a spreadsheet.
@@ -36,6 +37,7 @@ class CsvSheet {
   List _contents;
   HashMap _headers;
   _CsvColumn _fakeColumn;
+  CsvRow _row;
   
   /// Return true if this sheet was created with a header row.
   bool hasHeaderRow;
@@ -78,11 +80,16 @@ class CsvSheet {
         }
         _headers[_rows[i]] = i;
       }
+      _row = new CsvRow(_headers);
       _contents = new List.generate(allRows.length - 1, (index) =>
           allRows[index+1].split(fieldSep).map((cell) => cell.trim()).toList());
     } else {
+      _row = new CsvRow();
       _contents = new List.generate(allRows.length, (index) => 
         allRows[index].split(fieldSep).map((cell) => cell.trim()).toList());
+    }
+    while(_contents.last.length != _contents.first.length) {
+      _contents.removeLast();
     }
   }
   
@@ -111,17 +118,16 @@ class CsvSheet {
   }
   
   /**
-   * Iterate through each row in the spreadsheet, calling 'action' for each
-   * row. It is an error if action tries to modify the list. The header row
-   * is not passed as the first row.
+   * Iterate through each row in the spreadsheet as a CsvRow, calling 'action' 
+   * for each row. It is an error if action tries to modify the list.
    * 
-   * Note: The list of cells passed to 'action' will be zero-indexed and not
-   * 1-based index as the CsvSheet is.
-   * 
+   * The CsvRow is indexable via the headers if applicable. 
    */
-  void forEachRow(void action(List cells)) {
-    //TODO: Fix this so I can use a fakeRow which will be indexable by headers
-    _contents.forEach(action);
+  void forEachRow(void action(CsvRow cells)) {
+    _contents.forEach((row) {
+      _row.row = row;
+      action(_row);
+    });
   }
   
   /**

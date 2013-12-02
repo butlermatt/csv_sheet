@@ -41,16 +41,20 @@ main() {
       expect(works, returnsNormally);
     });
     test('Should automatically remove extra whitespace.', () {
-      var testSheet = '1, 2  ,3\t4\n5   ,     6,\t\t7\t,8';
+      var testSheet = '1, 2  ,3,\t4\n5   ,     6,\t\t7\t,8';
       var sheet = new CsvSheet(testSheet);
       expect(sheet[2][2], equals('6'));
       expect(sheet[3][2], equals('7'));
     });
-    
     test('Throws FormatException if a header column is repeated', () {
       var testSheet = 'col1,col2,col1\n1,2,3\n4,5,6\n7,8,9';
       doesntwork() { new CsvSheet(testSheet, headerRow: true); }
       expect(doesntwork, throwsFormatException);
+    });
+    test('Should truncate empty rows', () {
+      var testSheet = 'col1,col2,col3\n1,2,3\n4,5,6\n7,8,9\n\n\n';
+      var sheet = new CsvSheet(testSheet, headerRow: true);
+      expect(sheet.numRows, equals(3));
     });
   });
   
@@ -92,18 +96,36 @@ main() {
       var testSheet = '1,2,3\n1,2,3';
       var sheet = new CsvSheet(testSheet);
       var callback = expectAsync1((List row) {
-        expect(row[0], equals('1'));
+        expect(row[1], equals('1'));
       }, count: 2);
       
       sheet.forEachRow(callback);
     });
     test('Should not pass the header row to the callback', () {
       var sheet = new CsvSheet(SHEET, headerRow: true);
-      var callback = expectAsync1((List row) {
-        expect(row, isList);
+      var callback = expectAsync1((CsvRow row) {
+        expect(row, new isInstanceOf<CsvRow>('CsvRow'));
       }, count: 3);
       
       sheet.forEachRow(callback);
     });
-  });
+    group('CsvRow', () {
+      test('Should be 1-based index', () {
+        var testSheet = '1,2,3\n1,2,3';
+        var sheet = new CsvSheet(testSheet);
+        var callback = expectAsync1((CsvRow row) {
+          expect(row[1], equals('1'));
+        }, count: 2);
+        sheet.forEachRow(callback);
+      });
+      test('Should be header indexable', () {
+        var testSheet = 'one,two,three\n1,2,3\n1,2,3';
+        var sheet = new CsvSheet(testSheet, headerRow: true);
+        var callback = expectAsync1((CsvRow row) {
+          expect(row['two'], equals('2'));
+        }, count: 2);
+        sheet.forEachRow(callback);
+      }); 
+    }); // end Group CsvRow
+  }); // End group CsvSheet forEachRow
 }
