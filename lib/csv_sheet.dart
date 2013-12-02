@@ -114,8 +114,10 @@ class CsvSheet {
    * 
    * Note: The list of cells passed to 'action' will be zero-indexed and not
    * 1-based index as the CsvSheet is.
+   * 
    */
   void forEachRow(void action(List cells)) {
+    //TODO: Fix this so I can use a fakeRow which will be indexable by headers
     _contents.forEach(action);
   }
   
