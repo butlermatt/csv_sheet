@@ -46,6 +46,12 @@ main() {
       expect(sheet[2][2], equals('6'));
       expect(sheet[3][2], equals('7'));
     });
+    
+    test('Throws FormatException if a header column is repeated', () {
+      var testSheet = 'col1,col2,col1\n1,2,3\n4,5,6\n7,8,9';
+      doesntwork() { new CsvSheet(testSheet, headerRow: true); }
+      expect(doesntwork, throwsFormatException);
+    });
   });
   
   group('CsvSheet attributes', () {

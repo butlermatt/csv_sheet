@@ -67,6 +67,14 @@ class CsvSheet {
     if(hasHeaderRow) {
       // TODO: Should throw if a header name is repeated.
       _rows = rows[0].split(fieldSep);
+      for(var i = 0; i < _rows.length; i++) {
+        var val = _rows[i];
+        if(_rows.indexOf(val, i+1) != -1) {
+          throw 
+            new FormatException('The header column $val appears more than once');
+        }
+      }
+      
       _contents = new List.generate(rows.length - 1, (index) =>
           rows[index+1].split(fieldSep).map((cell) => cell.trim()).toList());
     } else {
