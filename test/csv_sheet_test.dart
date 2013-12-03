@@ -95,7 +95,7 @@ main() {
     test('Should call the callback for each row passed', () {
       var testSheet = '1,2,3\n1,2,3';
       var sheet = new CsvSheet(testSheet);
-      var callback = expectAsync1((List row) {
+      var callback = expectAsync1((CsvRow row) {
         expect(row[1], equals('1'));
       }, count: 2);
       
