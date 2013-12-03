@@ -30,7 +30,7 @@ part 'src/csv_row.dart';
  *     // access the value of cell 2,3 (in a spreadsheet as B3)
  *     var value = csvSheet[2][3]; // 8
  *     
- *     // If the cell has the header value of 'first name'
+ *     // If the cell has the header value of 'col1'
  *     var value = csvSheet['col1'][2]; // 4
  */
 class CsvSheet {
@@ -81,12 +81,82 @@ class CsvSheet {
         _headers[_rows[i]] = i;
       }
       _row = new CsvRow(_headers);
-      _contents = new List.generate(allRows.length - 1, (index) =>
-          allRows[index+1].split(fieldSep).map((cell) => cell.trim()).toList());
-    } else {
+      _contents = new List<String>();
+      var allRowsLength = allRows.length;
+      for(var index = 1; index < allRowsLength; index++) {
+        
+        // Find unterminated quotes per row
+        // usually occurs if there are multiple line entries.
+        var numQuotes = _countQuotes(allRows[index]);
+        while(numQuotes % 2 != 0) {
+          if((index + 1) > (allRowsLength - 1))
+            throw new FormatException('Unterminated quoted field');
+          
+          allRows[index] = allRows[index] + lineSep + allRows[index + 1];
+          allRows.removeAt(index + 1);
+          allRowsLength -= 1;
+          numQuotes = _countQuotes(allRows[index]);
+        }
+        
+        // Find unterminated quotes in each cell
+        var tmpRow = allRows[index].split(fieldSep);
+        var rowLength = tmpRow.length;
+        
+        for(var ind = 0; ind < rowLength; ind++) {
+          numQuotes = _countQuotes(tmpRow[ind]);
+          while(numQuotes % 2 == 1) {
+            if((ind + 1) > (rowLength - 1))
+              throw new FormatException('Unterminated quoted field');
+            
+            tmpRow[ind] = tmpRow[ind] + fieldSep + tmpRow[ind + 1];
+            tmpRow.removeAt(ind + 1);
+            rowLength -= 1;
+            numQuotes = _countQuotes(tmpRow[ind]);
+          }
+          tmpRow[ind] = tmpRow[ind].replaceAll('"', '').trim();
+        }
+            
+        _contents.add(tmpRow);
+      } // end for loop
+    } else { // hasHeaderRow
       _row = new CsvRow();
-      _contents = new List.generate(allRows.length, (index) => 
-        allRows[index].split(fieldSep).map((cell) => cell.trim()).toList());
+      _contents = new List<String>();
+      var allRowsLength = allRows.length;
+      for(var index = 0; index < allRowsLength; index++) {
+        
+        // Find unterminated quotes per row
+        // usually occurs if there are multiple line entries.
+        var numQuotes = _countQuotes(allRows[index]);
+        while(numQuotes % 2 != 0) {
+          if((index + 1) > (allRowsLength - 1))
+            throw new FormatException('Unterminated quoted field');
+          
+          allRows[index] = allRows[index] + lineSep + allRows[index + 1];
+          allRows.removeAt(index + 1);
+          allRowsLength -= 1;
+          numQuotes = _countQuotes(allRows[index]);
+        }
+        
+        // Find unterminated quotes in each cell
+        var tmpRow = allRows[index].split(fieldSep);
+        var rowLength = tmpRow.length;
+        
+        for(var ind = 0; ind < rowLength; ind++) {
+          numQuotes = _countQuotes(tmpRow[ind]);
+          while(numQuotes % 2 == 1) {
+            if((ind + 1) > (rowLength - 1))
+              throw new FormatException('Unterminated quoted field');
+            
+            tmpRow[ind] = tmpRow[ind] + fieldSep + tmpRow[ind + 1];
+            tmpRow.removeAt(ind + 1);
+            rowLength -= 1;
+            numQuotes = _countQuotes(tmpRow[ind]);
+          }
+          tmpRow[ind] = tmpRow[ind].replaceAll('"', '').trim();
+        }
+            
+        _contents.add(tmpRow);
+      } // end for loop
     }
     while(_contents.last.length != _contents.first.length) {
       _contents.removeLast();
@@ -143,5 +213,19 @@ class CsvSheet {
   
   // Used by _CsvColumn to access rows spreadsheet style instead of list style.
   _getValue(column, row) => _contents[row][column];
+  
+  num _countQuotes(String str) {
+    var numQuotes = 0;
+    var quoteIndex = str.indexOf('"');
+    while(quoteIndex != -1) {
+      numQuotes += 1;
+      if((quoteIndex + 1) < str.length) {
+        quoteIndex = str.indexOf('"', quoteIndex + 1);
+      } else {
+        break;
+      }
+    }
+    return numQuotes;
+  }
   
 }

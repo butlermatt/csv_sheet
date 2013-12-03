@@ -26,7 +26,7 @@ main() {
       works () { new CsvSheet(SHEET); };
       expect(works, returnsNormally);
     });
-    test('Should accept boolean titleRow flag', () {
+    test('Should accept boolean headerRow flag', () {
       works() { new CsvSheet(SHEET, headerRow: true); };
       expect(works, returnsNormally);
     });
@@ -50,6 +50,28 @@ main() {
       var testSheet = 'col1,col2,col1\n1,2,3\n4,5,6\n7,8,9';
       doesntwork() { new CsvSheet(testSheet, headerRow: true); }
       expect(doesntwork, throwsFormatException);
+    });
+    test('Should support quoted fields containing commas', () {
+      var testSheet = 'col1,col2,col3\n1,2,3\n"4,5",5,6\n7,8,9';
+      var sheet = new CsvSheet(testSheet, headerRow: true);
+      var sheet2 = new CsvSheet(testSheet);
+      expect(sheet['col1'][2], equals('4,5'));
+      expect(sheet2[1][3], equals('4,5'));
+    });
+    test('Should support quoted fields containing new lines', () {
+      var testSheet = 'col1,col2,col3\n1,2,3\n"4\n5",5,6\n7,8,9';
+      var sheet = new CsvSheet(testSheet, headerRow: true);
+      var sheet2 = new CsvSheet(testSheet);
+      expect(sheet['col1'][2], equals('4\n5'));
+      expect(sheet2[1][3], equals('4\n5'));
+    });
+    test('Should throw FormatExcept on unterminated quoted field', () {
+      var testSheet = 'col1,col2,col3\n1,2,3\n"4\n5,5,6\n7,8,9';
+      var testSheet2 = 'col1,col2,col3\n1,2,3\n"4,5,5,6\n7,8,9';
+      doesntwork() { new CsvSheet(testSheet, headerRow: true); }
+      doesntwork2() { new CsvSheet(testSheet2, headerRow: true); }
+      expect(doesntwork, throwsFormatException);
+      expect(doesntwork2, throwsFormatException);
     });
     test('Should truncate empty rows', () {
       var testSheet = 'col1,col2,col3\n1,2,3\n4,5,6\n7,8,9\n\n\n';
