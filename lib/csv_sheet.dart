@@ -136,6 +136,11 @@ class CsvSheet {
    */
   int get numRows => _contents.length;
   
+  /**
+   * Return the number of columns contained in this sheet.
+   */
+  int get numCols => _contents[0].length;
+  
   // Used by _CsvColumn to access rows spreadsheet style instead of list style.
   _getValue(column, row) => _contents[row][column];
   
