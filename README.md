@@ -1,4 +1,4 @@
-CSV Sheet[![Build Status](https://drone.io/github.com/butlermatt/csv_sheet/status.png)](https://drone.io/github.com/butlermatt/csv_sheet/latest)
+CSV Sheet [![Build Status](https://drone.io/github.com/butlermatt/csv_sheet/status.png)](https://drone.io/github.com/butlermatt/csv_sheet/latest)
 =========
 
 Dart based CSV parser which for reading and accessing CSV Files as spreadsheets
