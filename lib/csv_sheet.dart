@@ -81,7 +81,7 @@ class CsvSheet {
         _headers[_rows[i]] = i;
       }
       _row = new CsvRow(_headers);
-      _contents = new List<String>();
+      _contents = new List<List<String>>();
       var allRowsLength = allRows.length;
       for(var index = 1; index < allRowsLength; index++) {
         
@@ -120,7 +120,7 @@ class CsvSheet {
       } // end for loop
     } else { // hasHeaderRow
       _row = new CsvRow();
-      _contents = new List<String>();
+      _contents = new List<List<String>>();
       var allRowsLength = allRows.length;
       for(var index = 0; index < allRowsLength; index++) {
         
