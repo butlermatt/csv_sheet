@@ -1,4 +1,4 @@
-part of csv_sheet;
+part of CsvSheet;
 
 /**
  * Currently CsvRow is only used as a type passed to the [CsvSheet.forEachRow]

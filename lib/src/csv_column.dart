@@ -1,4 +1,4 @@
-part of csv_sheet;
+part of CsvSheet;
 
 class _CsvColumn {
   final CsvSheet sheet;

@@ -1,4 +1,4 @@
-library csv_sheet;
+library CsvSheet;
 
 import 'dart:collection' show HashMap;
 
