@@ -86,5 +86,4 @@ var value = sheet[2][3];
 var value = sheet['col2'][3];
 ```
 
-For further details on usage. Check out the [API Documentation]
-(http://butlermatt.github.io/csv_sheet/).
+For further details on usage. Check out the [API Documentation](http://butlermatt.github.io/csv_sheet/).
