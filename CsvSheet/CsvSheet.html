@@ -2,19 +2,19 @@
         <html>
         <head>
                 <meta charset="utf-8">
-        <title>CsvSheet class / csv_sheet Library / Dart Documentation</title>
+        <title>CsvSheet class / CsvSheet Library / Dart Documentation</title>
         <link rel="stylesheet" type="text/css"
             href="../styles.css">
         <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
         <link rel="shortcut icon" href="../favicon.ico">
         
         </head>
-        <body data-library="csv_sheet" data-type="CsvSheet">
+        <body data-library="CsvSheet" data-type="CsvSheet">
         <div class="page">
         <div class="header">
           <a href="../index.html"><div class="logo"></div></a>
           <a href="../index.html">Dart Documentation</a>
-         &rsaquo; <a href="../csv_sheet.html">csv_sheet</a> &rsaquo; <a href="../csv_sheet/CsvSheet.html">CsvSheet</a>        <div id="search-box">
+         &rsaquo; <a href="../CsvSheet.html">CsvSheet</a> &rsaquo; <a href="../CsvSheet/CsvSheet.html">CsvSheet</a>        <div id="search-box">
           <input type="search" name="q" id="q" autocomplete="off"
               class="search-input" placeholder="Search API">
         </div>
@@ -33,7 +33,7 @@
 <button id="show-inherited" class="show-inherited">Hide inherited</button>
 <div class="doc">
 <p>An indexable collection of CSV Values as a spreadsheet.</p>
-<p>As spreadsheets (and unlike lists), a <a class="crossref" href="../csv_sheet/CsvSheet.html">CsvSheet</a> is indexed via 
+<p>As spreadsheets (and unlike lists), a <a class="crossref" href="../CsvSheet/CsvSheet.html">CsvSheet</a> is indexed via 
 column and then row, rather than row and column.</p>
 <p>Columns can be referenced via their index number (1-based) or
 via their column header <code>String</code>.</p>
@@ -159,6 +159,11 @@ class CsvSheet {
   */
  int get numRows =&gt; _contents.length;
  
+ /**
+  * Return the number of columns contained in this sheet.
+  */
+ int get numCols =&gt; _contents[0].length;
+ 
  // Used by _CsvColumn to access rows spreadsheet style instead of list style.
  _getValue(column, row) =&gt; _contents[row][column];
  
@@ -237,6 +242,19 @@ bool hasHeaderRow
 </pre>
 </div>
 </div>
+<div class="field"><h4 id="numCols">
+<button class="show-code">Code</button>
+final int         <strong>numCols</strong> <a class="anchor-link"
+            href="#numCols"
+            title="Permalink to CsvSheet.numCols">#</a>
+        </h4>
+        <div class="doc">
+<p>Return the number of columns contained in this sheet.</p>
+<pre class="source">
+int get numCols =&gt; _contents[0].length;
+</pre>
+</div>
+</div>
 <div class="field"><h4 id="numRows">
 <button class="show-code">Code</button>
 final int         <strong>numRows</strong> <a class="anchor-link"
@@ -263,7 +281,7 @@ dynamic <strong>operator []</strong>(index) <a class="anchor-link" href="#[]"
 <span class="param">index</span>. Index may be a 1-based integer
 value or a string matching one of the header rows.</p>
 <p>Throws a <code>RangeError</code> if invalid index or if a String index is used but
-<a class="crossref" href="../csv_sheet/CsvSheet.html#hasHeaderRow">hasHeaderRow</a> is false.</p>
+<a class="crossref" href="../CsvSheet/CsvSheet.html#hasHeaderRow">hasHeaderRow</a> is false.</p>
 <pre class="source">
 operator [](index) {
  if(index is String) {
@@ -289,7 +307,7 @@ operator [](index) {
 <h3>Methods</h3>
 <div class="method"><h4 id="forEachRow">
 <button class="show-code">Code</button>
-void <strong>forEachRow</strong>(void action(<a href="../csv_sheet/CsvRow.html">CsvRow</a> cells)) <a class="anchor-link" href="#forEachRow"
+void <strong>forEachRow</strong>(void action(<a href="../CsvSheet/CsvRow.html">CsvRow</a> cells)) <a class="anchor-link" href="#forEachRow"
               title="Permalink to CsvSheet.forEachRow">#</a></h4>
 <div class="doc">
 <p>Iterate through each row in the spreadsheet as a CsvRow, calling 'action' 
@@ -310,7 +328,7 @@ void forEachRow(void action(CsvRow cells)) {
         <div class="clear"></div>
         </div>
         <div class="footer">
-          <div>This page was generated at 2013-12-03 09:42:44.853</div>
+          <div>This page was generated at 2013-12-03 11:06:23.165</div>
         </div>
         <script async src="../client-live-nav.js"></script>
         </body></html>
