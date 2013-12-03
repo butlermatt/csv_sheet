@@ -87,3 +87,10 @@ var value = sheet['col2'][3];
 ```
 
 For further details on usage. Check out the [API Documentation](http://butlermatt.github.io/csv_sheet/).
+
+ChangeLog
+---------
+
+0.0.1 -- Initial release
+0.0.2 -- Added support for quoted fields.
+
