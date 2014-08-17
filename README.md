@@ -76,8 +76,8 @@ of the cells.
     7,8,9
 
 If this was a normal List and we wanted to access the values stored in
-col2 row 3, we would reference it as `list[3][1] == 8` (assuming headers were 
-also stored in the list). However with CsvSheet to access the same value, we 
+col2 row 3, we would reference it as `list[3][1] == 8` (assuming headers were
+also stored in the list). However with CsvSheet to access the same value, we
 would do so like this:
 
 ```dart
@@ -87,11 +87,3 @@ var value = sheet['col2'][3];
 ```
 
 For further details on usage. Check out the [API Documentation](http://butlermatt.github.io/csv_sheet/).
-
-ChangeLog
----------
-
-* 0.0.1 -- Initial release
-* 0.0.2 -- Added support for quoted fields.
-* 0.0.2+1 -- Fixed type error
-
