@@ -78,20 +78,28 @@ main() {
       var sheet = new CsvSheet(testSheet, headerRow: true);
       expect(sheet.numRows, equals(3));
     });
+    test('Should support and strip each every string field quoted', () {
+      var testSheet = '"col1","col2","col3"\n' + 
+          '"1","2","3"\n' +
+          '"4","5","6"\n' + 
+          '"7","8","9"';
+      var sheet = new CsvSheet(testSheet, headerRow: true);
+      expect(sheet['col1'][2], equals('4'));
+    });
   });
-  
+
   group('CsvSheet attributes', () {
     test('hasHeaderRow Is true when headerRow is passed to constructor', () {
       var sheet = new CsvSheet(SHEET, headerRow: true);
       expect(sheet.hasHeaderRow, isTrue);
     });
-    
+
     test('numRows returns number of rows, excluding header row.', () {
       var sheet = new CsvSheet(SHEET, headerRow: true);
       expect(sheet.numRows, equals(3));
     });
   });
-  
+
   group('CsvSheet access operator', () {
     test('Returns 0-based index via columns and rows.', () {
       var sheet = new CsvSheet(SHEET, headerRow: true);
@@ -112,7 +120,7 @@ main() {
       expect(doesntWork, throwsRangeError);
     });
   });
-  
+
   group('CsvSheet forEachRow', () {
     test('Should call the callback for each row passed', () {
       var testSheet = '1,2,3\n1,2,3';
@@ -120,7 +128,7 @@ main() {
       var callback = expectAsync((CsvRow row) {
         expect(row[1], equals('1'));
       }, count: 2);
-      
+
       sheet.forEachRow(callback);
     });
     test('Should not pass the header row to the callback', () {
@@ -128,7 +136,7 @@ main() {
       var callback = expectAsync((CsvRow row) {
         expect(row, new isInstanceOf<CsvRow>('CsvRow'));
       }, count: 3);
-      
+
       sheet.forEachRow(callback);
     });
     group('CsvRow', () {
@@ -147,7 +155,7 @@ main() {
           expect(row['two'], equals('2'));
         }, count: 2);
         sheet.forEachRow(callback);
-      }); 
+      });
     }); // end Group CsvRow
   }); // End group CsvSheet forEachRow
 }
