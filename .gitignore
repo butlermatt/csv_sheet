@@ -5,3 +5,4 @@ pubspec.lock
 packages
 deploy
 build
+*.sublime-*
