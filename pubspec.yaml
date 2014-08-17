@@ -1,8 +1,8 @@
 name: csv_sheet
+version: 0.0.2+3
 author: Matthew Butler <butler.matthew@gmail.com>
-version: 0.0.2+1
-homepage: https://github.com/butlermatt/csv_sheet
 description: Library for dealing with CSV Spreadsheets.
+homepage: https://github.com/butlermatt/csv_sheet
 documentation: http://butlermatt.github.io/csv_sheet/
 dev_dependencies:
-  unittest: '>=0.9.0 <0.10.0'
+  unittest: '>=0.11.0 <0.12.0'

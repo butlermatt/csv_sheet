@@ -117,7 +117,7 @@ main() {
     test('Should call the callback for each row passed', () {
       var testSheet = '1,2,3\n1,2,3';
       var sheet = new CsvSheet(testSheet);
-      var callback = expectAsync1((CsvRow row) {
+      var callback = expectAsync((CsvRow row) {
         expect(row[1], equals('1'));
       }, count: 2);
       
@@ -125,7 +125,7 @@ main() {
     });
     test('Should not pass the header row to the callback', () {
       var sheet = new CsvSheet(SHEET, headerRow: true);
-      var callback = expectAsync1((CsvRow row) {
+      var callback = expectAsync((CsvRow row) {
         expect(row, new isInstanceOf<CsvRow>('CsvRow'));
       }, count: 3);
       
@@ -135,7 +135,7 @@ main() {
       test('Should be 1-based index', () {
         var testSheet = '1,2,3\n1,2,3';
         var sheet = new CsvSheet(testSheet);
-        var callback = expectAsync1((CsvRow row) {
+        var callback = expectAsync((CsvRow row) {
           expect(row[1], equals('1'));
         }, count: 2);
         sheet.forEachRow(callback);
@@ -143,7 +143,7 @@ main() {
       test('Should be header indexable', () {
         var testSheet = 'one,two,three\n1,2,3\n1,2,3';
         var sheet = new CsvSheet(testSheet, headerRow: true);
-        var callback = expectAsync1((CsvRow row) {
+        var callback = expectAsync((CsvRow row) {
           expect(row['two'], equals('2'));
         }, count: 2);
         sheet.forEachRow(callback);
