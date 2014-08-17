@@ -1,3 +1,8 @@
+0.0.3 (August 17, 2014)
+=========================
+
+* Handle quoted column headers (Potential bugs exist in this).
+
 0.0.2+3 (August 17, 2014)
 =========================
 
